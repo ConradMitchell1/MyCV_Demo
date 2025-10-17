@@ -11,7 +11,7 @@ namespace MyCV_Demo
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer( // Fix: UseSqlServer (capital U)
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite( // Fix: UseSqlServer (capital U)
                 builder.Configuration.GetConnectionString("DefaultConnection")
             ));
 

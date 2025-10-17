@@ -20,7 +20,7 @@ namespace MyCV_Demo.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var items = await _db.GalleryItems.OrderByDescending(x => x.id).ToListAsync();
+            var items = await _db.GalleryItems.OrderByDescending(x => x.Id).ToListAsync();
             return View(items);
         }
         [HttpPost]
