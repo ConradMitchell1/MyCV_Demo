@@ -1,0 +1,9 @@
+﻿@model MyCV_Demo.Models.TaxInputModel
+<h1> Calculate your tax</h1>
+<form asp-action="CalculatePage" method="post">
+    <div>
+        <label>Annual Income</label>
+        <input asp-for="AnnualIncome" />
+    </div>
+    <button type="submit">Upload</button>
+</form>

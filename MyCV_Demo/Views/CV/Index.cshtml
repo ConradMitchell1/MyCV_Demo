@@ -1,0 +1,44 @@
+﻿@model MyCV_Demo.Models.CVModel
+
+<h1>@Model.FullName</h1>
+<p><em>@Model.Title</em> - @Model.Location - <a href="mailto:@Model.Email">@Model.Email</a></p>
+<p>@Model.Summary</p>
+
+<h2>Skills</h2>
+<ul>
+    @foreach(var s in Model.Skills) {<li>@s</li>}
+</ul>
+
+<h2> Work History</h2>
+@foreach(var e in Model.WorkExperiences)
+{
+    <section>
+        <h3>@e.Position @(" @ ") @e.Company</h3>
+        <p>@e.Duration</p>
+        @if(e.Responsibilities != null && e.Responsibilities.Any())
+        {
+            <ul>
+                @foreach(var r in e.Responsibilities)
+                {
+                    <li>@r</li>
+                }
+            </ul>
+        }
+        <p>@e.Description</p>
+    
+    </section>
+}
+
+<h2> Education</h2>
+<ul>
+    @foreach(var ed in Model.Educations)
+    {
+        <li>
+            <strong>@ed.Degree</strong> - @ed.Institution (@ed.Year)
+        </li>
+    }
+
+</ul>
+
+<!-- This is currently being worked on -->
+<p><a asp-action="Edit">Edit</a></p>
