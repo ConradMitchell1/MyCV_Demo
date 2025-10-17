@@ -9,10 +9,18 @@ namespace MyCV_Demo
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite( // Fix: UseSqlServer (capital U)
-                builder.Configuration.GetConnectionString("DefaultConnection")
+
+            // Resolve a writable home folder (works locally & on Azure App Service).
+            var home = Environment.GetEnvironmentVariable("HOME")
+                       ?? Directory.GetCurrentDirectory();
+
+            var dataDir = Path.Combine(home, "data");
+            Directory.CreateDirectory(dataDir);
+            var dbPath = Path.Combine(dataDir, "mycv_demo.sqlite");
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite($"Data Source={dbPath}"
             ));
 
             var app = builder.Build();
@@ -35,6 +43,12 @@ namespace MyCV_Demo
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            // Ensure DB is created/migrated on boot (important on Azure)
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.Migrate(); // requires you to have at least one migration
+            }
 
             app.Run();
         }
